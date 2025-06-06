@@ -21,6 +21,9 @@ p.textCompleted {
   color: #808080;
   text-decoration: line-through;
 }
+p.textNotCompleted {
+  color: white;
+}
 
 .checkContainer {
   width: 18px;
@@ -47,8 +50,6 @@ p.textCompleted {
   border: none;
   color: #808080;
 }
-
-
 
 .now {
   background-color: gray;

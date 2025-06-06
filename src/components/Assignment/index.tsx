@@ -30,20 +30,27 @@ export function Assignment({ assignment }: { assignment: TAssignment }) {
         )}
       </button>
 
-      <p key={assignment.id}>
+      <p
+        className={
+          assignment.isCompleted
+            ? styles.textCompleted
+            : styles.textNotCompleted
+        }
+        key={assignment.id}
+      >
         {assignment.description}
-        <label
-          className={
-            dueInfo.days <= 0
-              ? styles.now
-              : dueInfo.days === 1
-              ? styles.tomorrow
-              : styles.future
-          }
-        >
-          Duo: {dueInfo.label}
-        </label>
       </p>
+      <label
+        className={
+          dueInfo.days <= 0
+            ? styles.now
+            : dueInfo.days === 1
+            ? styles.tomorrow
+            : styles.future
+        }
+      >
+        Duo: {dueInfo.label}
+      </label>
 
       <button
         className={styles.deleteButton}
