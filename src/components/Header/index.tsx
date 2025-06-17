@@ -5,25 +5,34 @@ import { useAssigmentStore } from "../../stores/AssigmentStore";
 import { DayPicker } from "react-day-picker";
 import { useState } from "react";
 import "react-day-picker/dist/style.css";
+import { TAssignment } from "../../types/TAssignment";
 
 export function Header() {
-  const {
-    onCreateAssigment,
-    assignmentDesc,
-    setAssignmentDesc,
-    setDueDate,
-    dueDate,
-  } = useAssigmentStore();
+  const { onCreateAssigment } = useAssigmentStore();
 
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  const [newAssignment, setNewAssignment] = useState<TAssignment>({
+    id: "",
+    description: "",
+    dueDate: new Date(),
+    isCompleted: false,
+  });
+
   function handleCreatAssignment(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    onCreateAssigment(assignmentDesc, dueDate);
+    onCreateAssigment(newAssignment);
   }
 
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setAssignmentDesc(e.target.value);
+    //setAssignmentDesc(e.target.value);
+    setNewAssignment(
+      (prev) =>
+        ({
+          ...prev,
+          description: e.target.value,
+        } as TAssignment)
+    );
   }
   function handleDatePicker() {
     setShowDatePicker((prev) => !prev);
@@ -32,19 +41,23 @@ export function Header() {
   return (
     <header className={styles.header}>
       <h1>{uppercase("bcit")} Assignment Tracker</h1>
-      <form className={styles.newAssignmentForm} onSubmit={handleCreatAssignment}>
+      <form
+        className={styles.newAssignmentForm}
+        onSubmit={handleCreatAssignment}
+      >
         <div>
           <input
             placeholder="Add a new assignment"
             type="text"
-            value={assignmentDesc}
+            // value={assignmentDesc}
+            value={newAssignment?.description}
             onChange={handleOnChange}
           />
         </div>
         <div>
           <input
             placeholder="Select the due Date"
-            value={dueDate?.toDateString()}
+            value={newAssignment?.dueDate?.toDateString()}
             onClick={handleDatePicker}
           ></input>
           {showDatePicker && (
@@ -52,12 +65,19 @@ export function Header() {
               animate
               mode="single"
               onSelect={(date) => {
-                if (typeof date != "undefined") setDueDate(date);
+                if (typeof date != "undefined")
+                  setNewAssignment(
+                    (prev) =>
+                      ({
+                        ...prev,
+                        dueDate: date,
+                      } as TAssignment)
+                  );
                 setShowDatePicker(false);
               }}
               footer={
-                dueDate
-                  ? `Selected: ${dueDate.toLocaleDateString()}`
+                newAssignment.dueDate
+                  ? `Selected: ${newAssignment.dueDate.toLocaleDateString()}`
                   : "Pick a day."
               }
             />
@@ -65,8 +85,7 @@ export function Header() {
         </div>
 
         <button
-         
-          disabled={assignmentDesc.trim() === "" ? true : false}
+          disabled={newAssignment?.description.trim() === "" ? true : false}
         >
           Create <AiOutlinePlusCircle size={20} />
         </button>

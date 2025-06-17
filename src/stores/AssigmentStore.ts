@@ -4,12 +4,8 @@ import { TAssignment } from "../types/TAssignment";
 interface AssigmentState {
   assigments: TAssignment[];
   onDeleteAssignment: (id: string) => void;
-  onCreateAssigment: (text: string, date: Date) => void;
+  onCreateAssigment: (newAssignment: TAssignment) => void;
   onSetCompleted: (id: string) => void;
-  assignmentDesc: string;
-  setAssignmentDesc: (description: string) => void;
-  dueDate: Date ;
-  setDueDate: (date: Date) => void;
 }
 
 export const useAssigmentStore = create<AssigmentState>((set) => ({
@@ -30,15 +26,15 @@ export const useAssigmentStore = create<AssigmentState>((set) => ({
       ),
     })),
 
-  onCreateAssigment: (description, dueDate) =>
+  onCreateAssigment: (newAssignment) =>
     set((state) => ({
       assigments: [
         ...state.assigments,
         {
           id: crypto.randomUUID(),
-          description: description,
+          description: newAssignment.description,
           isCompleted: false,
-          dueDate: dueDate,
+          dueDate: newAssignment.dueDate,
         },
       ],
       assignmentDesc: "",
@@ -49,10 +45,4 @@ export const useAssigmentStore = create<AssigmentState>((set) => ({
         asi.id === id ? { ...asi, isCompleted: true } : asi
       ),
     })),
-
-  assignmentDesc: "",
-  setAssignmentDesc: (description) => set({ assignmentDesc: description }),
-
-  dueDate: new Date(),
-  setDueDate: (date) => set({ dueDate: date }),
 }));
