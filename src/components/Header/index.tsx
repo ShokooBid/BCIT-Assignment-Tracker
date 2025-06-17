@@ -17,7 +17,7 @@ export function Header() {
 
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  function handleCreatAssignment(e: React.MouseEvent<HTMLButtonElement>) {
+  function handleCreatAssignment(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     onCreateAssigment(assignmentDesc, dueDate);
   }
@@ -32,7 +32,7 @@ export function Header() {
   return (
     <header className={styles.header}>
       <h1>{uppercase("bcit")} Assignment Tracker</h1>
-      <form className={styles.newAssignmentForm}>
+      <form className={styles.newAssignmentForm} onSubmit={handleCreatAssignment}>
         <div>
           <input
             placeholder="Add a new assignment"
@@ -65,7 +65,7 @@ export function Header() {
         </div>
 
         <button
-          onClick={handleCreatAssignment}
+         
           disabled={assignmentDesc.trim() === "" ? true : false}
         >
           Create <AiOutlinePlusCircle size={20} />
